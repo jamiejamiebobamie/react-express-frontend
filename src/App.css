@@ -1,5 +1,8 @@
 .App {
+    display: flex;
+    flex-direction: row;
   text-align: center;
+  justify-content: space-around;
 }
 
 .App-logo {
@@ -29,4 +32,23 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+.inputFields{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 400px;
+}
+
+.submitButton{
+    width:100px;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.output{
+    margin-left: 100px;
 }
