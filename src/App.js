@@ -15,11 +15,12 @@ class App extends Component {
       message: null,
       die: 4,
       sides: 6,
-      pokemon: '',
+      info: '',
+      zip: null,
     }
     this.handleChangeSides = this.handleChangeSides.bind(this);
     this.handleChangeDie = this.handleChangeDie.bind(this);
-    this.handleChangePokemon = this.handleChangePokemon.bind(this);
+    this.handleChangeZip = this.handleChangeZip.bind(this);
   }
 
   componentDidMount() {
@@ -49,8 +50,8 @@ class App extends Component {
     this.setState({ sides: event.target.value });
   }
 
-  handleChangePokemon(event) {
-    this.setState({ pokemon: event.target.value });
+  handleChangeZip(event) {
+    this.setState({ zip: event.target.value });
   }
 
   fetchMessage() {
@@ -85,38 +86,38 @@ class App extends Component {
     })
   }
 
-  fetchPokemon() {
+  fetchInfo() {
     // Wrapping the API call in a function allow you to make calls to this
     // API as often as needed.
     // This calls a route and passes value in the query string.
 
-    const { pokemon } = this.state
+    const { zip } = this.state
 
-    console.log(pokemon)
+    console.log(zip)
 
-    const fetchUrl = `/pokemon/${pokemon}`;
+    const fetchUrl = `/weather/${zip}`;
 
     fetch(fetchUrl).then(res => res.json()).then((json) => {
       console.log('>', json)
-      // this.setState({
-      //   pokemon: json.poke,
-      // })
+      if (json.info){
+          this.setState({ info: json.info.city.name })
+      }
     }).catch((err) => {
       console.log(err.message)
     })
   }
 
 
-  renderPokemon() {
+  renderInfo() {
     // Used to conditionally render data from server.
     // Returns null if message is null otherwise returns
     // a populated JSX element.
-    const { pokemon } = this.state
-    if (pokemon === null || pokemon === '') {
+    const { info } = this.state
+    if (info === null || info === '') {
       return undefined
     }
 
-    return <div>{pokemon}</div>
+    return <div>{info}</div>
   }
 
   renderMessage() {
@@ -169,13 +170,13 @@ class App extends Component {
 
         <div>
 
-        <div className="output">{this.renderPokemon()}</div>
+        <div className="output">{this.renderInfo()}</div>
 
           <form className="inputFields">
 
             <label>
-            Type the name of a pokemon
-            <input type="text" name="pokemon" value={this.state.pokemon} onChange={this.handleChangePokemon} />
+            Enter a zip code:
+            <input type="text" name="info" value={this.state.zip} onChange={this.handleChangeZip} />
             </label>
           </form>
 
@@ -184,9 +185,9 @@ class App extends Component {
             type="submit"
             value="Submit"
             onClick={() => {
-              this.fetchPokemon()
+              this.fetchInfo()
             }}
-          >Speak</button>
+          >Submit</button>
         </div>
 
         <div className="output">{this.renderMessage()}</div>
